@@ -12,7 +12,10 @@ export async function POST(req) {
       return NextResponse.json({ error: "No dream provided" }, { status: 400 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  process.env.SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
