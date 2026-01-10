@@ -8,14 +8,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 export async function POST(req) {
   try {
     const { dream } = await req.json();
+
     if (!dream || !dream.trim()) {
       return NextResponse.json({ error: "No dream provided" }, { status: 400 });
     }
 
-    const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  process.env.SITE_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      throw new Error("NEXT_PUBLIC_BASE_URL is missing");
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -30,12 +31,9 @@ export async function POST(req) {
           quantity: 1,
         },
       ],
-      // IMPORTANT: Checkout returns to /portal first (loading journey), then it routes to /reveal
       success_url: `${baseUrl}/portal?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/`,
-      metadata: {
-        dream: dream.slice(0, 4500),
-      },
+      metadata: { dream: dream.slice(0, 4500) },
     });
 
     return NextResponse.json({ url: session.url });
@@ -52,15 +50,14 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const session_id = searchParams.get("session_id");
+
     if (!session_id) {
       return NextResponse.json({ error: "Missing session_id" }, { status: 400 });
     }
 
     const session = await stripe.checkout.sessions.retrieve(session_id);
-
     const paid =
-      session.payment_status === "paid" ||
-      session.status === "complete";
+      session.payment_status === "paid" || session.status === "complete";
 
     return NextResponse.json({
       paid,
