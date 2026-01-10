@@ -130,9 +130,18 @@ export default function Reveal() {
   const caption = useMemo(() => safeTrim(section(deepText, "- CAPTION:")), [deepText]);
   const onImage = useMemo(() => safeTrim(section(deepText, "- ON-IMAGE TEXT:")), [deepText]);
 
-  const postTextToCopy = useMemo(() => {
-    return caption || "This dream is pointing at something I keep avoiding.\nWhat do you think it’s about?\nFind yours at <SITE_URL>";
-  }, [caption]);
+  const siteUrl =
+  (typeof window !== "undefined" && window.location?.origin) ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://www.nightmare-ai.co.uk";
+
+const postTextToCopy = useMemo(() => {
+  return (
+    caption ||
+    `This dream is pointing at something I keep avoiding.\nWhat do you think it’s about?\nFind yours at ${siteUrl}`
+  );
+}, [caption, siteUrl]);
+
 
   async function doCopy(label, text) {
     try {
