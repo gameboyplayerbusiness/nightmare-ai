@@ -138,12 +138,13 @@ export default function Reveal() {
   "https://www.nightmare-ai.co.uk";
 
 const postTextToCopy = useMemo(() => {
+  const cleanedCaption = (caption || "").replace(/<SITE_URL>/g, siteUrl);
+
   return (
-    caption ||
-    `This dream is pointing at something I keep avoiding.\nWhat do you think it’s about?\nFind yours at $https://www.nightmare-ai.co.uk`
+    cleanedCaption ||
+    `This dream is pointing at something I keep avoiding...\nWhat do you think it's about?\nFind yours at ${siteUrl}`
   );
 }, [caption, siteUrl]);
-
 
   async function doCopy(label, text) {
     try {
