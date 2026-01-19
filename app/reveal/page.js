@@ -140,7 +140,7 @@ export default function Reveal() {
 const postTextToCopy = useMemo(() => {
   return (
     caption ||
-    `This dream is pointing at something I keep avoiding.\nWhat do you think it’s about?\nFind yours at ${siteUrl}`
+    `This dream is pointing at something I keep avoiding.\nWhat do you think it’s about?\nFind yours at $https://www.nightmare-ai.co.uk`
   );
 }, [caption, siteUrl]);
 
