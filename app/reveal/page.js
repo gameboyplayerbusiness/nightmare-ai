@@ -30,7 +30,9 @@ function section(text, label) {
 }
 
 function safeTrim(s) {
-  return String(s || "").trim();
+  return String(s || "")
+  .trim()
+  .replace(/<SITE_URL>/g, siteUrl);
 }
 
 async function copy(text) {
