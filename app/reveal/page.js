@@ -32,7 +32,8 @@ function section(text, label) {
 function safeTrim(s) {
   return String(s || "")
   .trim()
-  .replace(/<\s*<SITE_URL>/g, siteUrl);
+  .replace(/<SITE_URL>/g,
+  "https://www.nightmare-ai.co.uk");
 }
 
 async function copy(text) {
@@ -138,7 +139,7 @@ export default function Reveal() {
   "https://www.nightmare-ai.co.uk";
 
 const postTextToCopy = useMemo(() => {
-  const cleanedCaption = (caption || "").replace(/<SITE_URL>/g, siteUrl);
+  const cleanedCaption = (caption || "").replace(/<SITE_URL>/g, "https://www.nightmare-ai.co.uk");
 
   return (
     cleanedCaption ||
