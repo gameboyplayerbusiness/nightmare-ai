@@ -31,9 +31,7 @@ function section(text, label) {
 
 function safeTrim(s) {
   return String(s || "")
-  .trim()
-  .replace(/<SITE_URL>/g,
-  "https://www.nightmare-ai.co.uk");
+  .trim();
 }
 
 async function copy(text) {
@@ -134,12 +132,13 @@ export default function Reveal() {
   const onImage = useMemo(() => safeTrim(section(deepText, "- ON-IMAGE TEXT:")), [deepText]);
 
   const siteUrl =
-  typeof window !== "undefined"
-    ? window.location.origin
-  : "https://www.nightmare-ai.co.uk";
+  typeof window !== "undefined" &&
+  window.location?.origin ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://www.nightmare-ai.co.uk";
 
 const postTextToCopy = useMemo(() => {
-  const cleanedCaption = (caption || "").replace(/<SITE_URL>/g, "https://www.nightmare-ai.co.uk");
+  const cleanedCaption = (caption || "").replace(/<SITE_URL>/g, siteUrl);
 
   return (
     cleanedCaption ||
